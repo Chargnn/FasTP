@@ -7,6 +7,7 @@
         @yield('header')
     </head>
     <body>
+        @include('layout.error_notifications')
         @yield('content')
         @yield('footer')
     </body>

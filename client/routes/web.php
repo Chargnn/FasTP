@@ -11,10 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/connect', 'FtpController@connect_form')->name('connect');
+Route::post('/connect', 'FtpController@connect')->name('connect_action');
 
-Route::get('/connect', function(){
-    return view('ftp-login.index');
-})->name('connect');
+Route::get('/', function(){
+    return view('index');
+})->name('listing');
