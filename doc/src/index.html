@@ -92,9 +92,16 @@
                             <a href="https://nodejs.org/en/download/">Composer download page</a> and install it.
                             <strong>Your Composer version must be >= 1.8.5.</strong>
                         </li>
-                        <!--<li><strong class="badge badge-danger-soft"><code>npm install gulp-cli -g</code></strong>: If
-                            you don't have the Gulp command line interface, you need to install it.
-                        </li>-->
+                        <li>
+                            Go into client folder and copy .env.example as .env in the same location. Replace all field as necessary.
+                        </li>
+                        <li>
+                            Into client folder, run <code>npm install</code> and <code>composer install</code> to fetch all dependencies.
+                        </li>
+                        <li>The next thing you should do after cloning FasTP is set your application key to a random string with
+                            <strong class="badge badge-danger-soft"><code>php artisan key:generate</code></strong>in client folder.
+                            Typically, this string should be 32 characters long and set to APP_KEY in your .env file.
+                        </li>
                     </ol>
                 </article>
                 <aside class="col-md-3 d-none d-md-block border-left">
