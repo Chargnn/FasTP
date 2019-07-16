@@ -19,7 +19,10 @@ class FtpController extends Controller
             return redirect('/connect')->withErrors('Can\'t connect to ftp');
 
         if (ftp_login($conn, request('username'), request('password'))) {
-            return redirect('/listing');
+            ftp_pasv($conn, true);
+            $files = ftp_nlist($conn, ".");
+            dd($files);
+            return redirect('/')->with('file_list', $files);
         } else {
             return redirect('/connect')->withErrors('Credentials are invalid');
         }
