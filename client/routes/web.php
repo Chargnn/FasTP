@@ -14,3 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/connect', function(){
+    return view('ftp-login.index');
+})->name('connect');
