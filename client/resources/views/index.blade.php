@@ -14,9 +14,12 @@
                         Files list
                         <div class="pull-right action-buttons">
                             <div class="btn-group pull-right">
-                                <!--<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                                     <span class="glyphicon glyphicon-cog" style="margin-right: 0px;"></span>
-                                </button>-->
+                                </button>
+                                <ul class="dropdown-menu slidedown">
+                                    <li><a href="/disconnect"><span class="glyphicon glyphicon-log-out"></span>Disconnect</a></li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -59,6 +62,6 @@
 @endsection
 
 @section('footer')
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 @endsection

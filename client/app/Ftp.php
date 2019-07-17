@@ -7,7 +7,6 @@ class Ftp
     /** Keep ftp connexion */
     protected static $instance = null;
 
-
     /**
      * Create instance
      * @param array|null $connValues

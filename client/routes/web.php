@@ -13,7 +13,7 @@
 
 Route::get('/connect', 'FtpController@connect_form')->name('connect');
 Route::post('/connect', 'FtpController@connect')->name('connect_action');
+Route::get('/disconnect', 'FtpController@disconnect_form')->name('disconnect');
+Route::post('/disconnect', 'FtpController@disconnect')->name('disconnect_action');
 
-Route::get('/', function(){
-    return view('index');
-})->name('listing');
+Route::get('/', 'HomeController@index')->name('listing');
