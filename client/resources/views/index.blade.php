@@ -48,7 +48,7 @@
                                     @if($file !== '.' && $file !== '..')
                                         <div class="pull-right action-buttons">
                                             <a href="/download/{{ $file }}"><span class="glyphicon glyphicon-download-alt"></span></a>
-                                            <a href="#" class="trash"><span class="glyphicon glyphicon-trash"></span></a>
+                                            <a href="/delete/{{ $file }}" class="trash"><span class="glyphicon glyphicon-trash"></span></a>
                                         </div>
                                     @endif
                                 </li>

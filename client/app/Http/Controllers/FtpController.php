@@ -51,6 +51,10 @@ class FtpController extends Controller
         return view('ftp-login.quit');
     }
 
+    /**
+     * Disconnect action (remove cookie)
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function disconnect(){
         return redirect('/connect')->withCookie(Cookie::make('ftp', '', -1));
     }
@@ -83,6 +87,29 @@ class FtpController extends Controller
 
             ftp_get($conn, 'php://output', $file, FTP_BINARY);
 
+        } else {
+            return redirect('/connect')->withErrors('Credentials are invalid');
+        }
+    }
+
+    public function delete(){
+        $cookie = json_decode(Cookie::get('ftp'));
+
+        if(!$cookie){
+            return redirect('/connect');
+        }
+
+        $conn = Ftp::instance(['host' => $cookie->host, 'port' => $cookie->port]);
+
+        if(!$conn) {
+            return redirect('/connect')->withErrors('Can\'t connect to ftp');
+        }
+
+        $file = request()->route('file');
+        if (ftp_login($conn, $cookie->username, $cookie->password)) {
+            ftp_pasv($conn, true);
+            ftp_delete($conn, $file);
+            return redirect('/');
         } else {
             return redirect('/connect')->withErrors('Credentials are invalid');
         }

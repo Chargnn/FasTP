@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Cookie;
 
 class HomeController extends Controller
 {
+    /**
+     * Index
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     */
     public function index(){
         $cookie = json_decode(Cookie::get('ftp'));
 
