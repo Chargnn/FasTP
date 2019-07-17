@@ -34,7 +34,7 @@
                                         <label for="checkbox">
                                             {{ $file }}
                                         </label>
-                                        <strong>{{ ftp_size(\App\Ftp::instance(), $file) > 0 ?: '' }}</strong>
+                                        <small>{{ ftp_size($conn, $file) > 0 ? '('.\App\Ftp::formatSize(ftp_size($conn, $file)).')' : '' }}</small>
                                     </div>
                                     @if($file !== '.' && $file !== '..')
                                         <div class="pull-right actikalgor1

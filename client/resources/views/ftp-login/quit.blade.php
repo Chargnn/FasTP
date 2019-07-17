@@ -15,7 +15,6 @@
 
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-
 					<div class="container-login100-form-btn">
                         <button class="login100-form-btn abort-form">
                             Go back
