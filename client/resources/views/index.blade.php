@@ -22,6 +22,13 @@
                                 </ul>
                             </div>
                         </div>
+                        <div class="pull-right action-buttons">
+                            <div class="btn-group pull-right">
+                                <button type="button" class="btn btn-default btn-xs" onclick="location.reload()">
+                                    <span class="glyphicon glyphicon-refresh" style="margin-right: 0px;"></span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <div class="panel-body">
                         <ul class="list-group">
@@ -34,12 +41,13 @@
                                         <label for="checkbox">
                                             {{ $file }}
                                         </label>
-                                        <small>{{ ftp_size($conn, $file) > 0 ? '('.\App\Ftp::formatSize(ftp_size($conn, $file)).')' : '' }}</small>
+                                        @if($file !== '.' && $file !== '..')
+                                            <small>{{ ftp_size($conn, $file) > 0 ? '('.\App\Ftp::formatSize(ftp_size($conn, $file)).')' : '(0 B)' }}</small>
+                                        @endif
                                     </div>
                                     @if($file !== '.' && $file !== '..')
-                                        <div class="pull-right actikalgor1
-                                        on-buttons">
-                                            <a href="#"><span class="glyphicon glyphicon-download-alt"></span></a>
+                                        <div class="pull-right action-buttons">
+                                            <a href="/download/{{ $file }}"><span class="glyphicon glyphicon-download-alt"></span></a>
                                             <a href="#" class="trash"><span class="glyphicon glyphicon-trash"></span></a>
                                         </div>
                                     @endif

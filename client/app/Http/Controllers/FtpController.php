@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Ftp;
+use http\Env\Request;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Input;
 
 class FtpController extends Controller
 {
@@ -50,5 +53,38 @@ class FtpController extends Controller
 
     public function disconnect(){
         return redirect('/connect')->withCookie(Cookie::make('ftp', '', -1));
+    }
+
+    /**
+     * Download ftp file into client's computer
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function download(){
+        $cookie = json_decode(Cookie::get('ftp'));
+
+        if(!$cookie){
+            return redirect('/connect');
+        }
+
+        $conn = Ftp::instance(['host' => $cookie->host, 'port' => $cookie->port]);
+
+        if(!$conn) {
+            return redirect('/connect')->withErrors('Can\'t connect to ftp');
+        }
+
+        $file = request()->route('file');
+        if (ftp_login($conn, $cookie->username, $cookie->password)) {
+            ftp_pasv($conn, true);
+            $size = ftp_size($conn, $file);
+
+            header("Content-Type: application/octet-stream");
+            header("Content-Disposition: attachment; filename=" . basename($file));
+            header("Content-Length: $size");
+
+            ftp_get($conn, 'php://output', $file, FTP_BINARY);
+
+        } else {
+            return redirect('/connect')->withErrors('Credentials are invalid');
+        }
     }
 }
