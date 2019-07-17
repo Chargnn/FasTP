@@ -37,6 +37,17 @@ class Ftp
         return round($bytes, $precision) . ' ' . $units[$pow];
     }
 
+    /**
+     * Convert epoch to Y-m-d H:i:s date
+     * @param $epoch
+     * @return string
+     * @throws \Exception
+     */
+    public static function formatDate($epoch){
+        $dt = new \DateTime("@$epoch");
+        return $dt->format('Y-m-d H:i:s');
+    }
+
     /** protected to prevent cloning */
     protected function __clone(){}
 

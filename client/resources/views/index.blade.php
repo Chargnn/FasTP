@@ -11,14 +11,14 @@
             <div class="col-md-12">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        Files list
+                        Files list - {{ ftp_pwd($conn) }} - {{ ftp_systype($conn) }}
                         <div class="pull-right action-buttons">
                             <div class="btn-group pull-right">
                                 <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                                     <span class="glyphicon glyphicon-cog" style="margin-right: 0px;"></span>
                                 </button>
                                 <ul class="dropdown-menu slidedown">
-                                    <li><a href="/disconnect"><span class="glyphicon glyphicon-log-out"></span>Disconnect</a></li>
+                                    <li><a href="/disconnect" onclick="if(!confirm('Are you sure?')){ return false; }"><span class="glyphicon glyphicon-log-out"></span>Disconnect</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -37,6 +37,9 @@
                                     <div class="checkbox">
                                         @if($file !== '.' && $file !== '..')
                                             <input type="checkbox" id="checkbox" />
+                                        @endif
+                                        @if($file !== '.' && $file !== '..')
+                                            <small>{{ ftp_mdtm($conn, $file) ? \App\Ftp::formatDate(ftp_mdtm($conn, $file)) : '' }}</small>
                                         @endif
                                         <label for="checkbox">
                                             {{ $file }}
@@ -58,8 +61,7 @@
                     <div class="panel-footer">
                         <div class="row">
                             <div class="col-md-6">
-                                <h6>
-                                    Total Count <span class="label label-info">{{ count($file_list) }}</span></h6>
+                                <h6>Total Count <span class="label label-info">{{ count($file_list) }}</span></h6>
                             </div>
                         </div>
                     </div>

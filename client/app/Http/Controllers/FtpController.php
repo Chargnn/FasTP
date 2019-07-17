@@ -44,14 +44,6 @@ class FtpController extends Controller
     }
 
     /**
-     * Show ftp disconnect form
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function disconnect_form(){
-        return view('ftp-login.quit');
-    }
-
-    /**
      * Disconnect action (remove cookie)
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
@@ -92,6 +84,10 @@ class FtpController extends Controller
         }
     }
 
+    /**
+     * Delete file from ftp
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function delete(){
         $cookie = json_decode(Cookie::get('ftp'));
 
