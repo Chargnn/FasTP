@@ -28,7 +28,8 @@ class HomeController extends Controller
             ftp_pasv($conn, true);
             $file_list = ftp_nlist($conn, ".");
             return view('index')->with('file_list', $file_list)
-                                      ->with('conn', $conn);
+                                      ->with('conn', $conn)
+                                      ->with('credentials', $cookie);
         } else {
             return redirect('/connect')->withErrors('Credentials are invalid');
         }

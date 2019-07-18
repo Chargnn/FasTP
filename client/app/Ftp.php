@@ -48,6 +48,43 @@ class Ftp
         return $dt->format('Y-m-d H:i:s');
     }
 
+    /**
+     * Check to see if given path is a directory
+     * @param $path
+     * @param $conn
+     * @return bool
+     */
+    public static function isDir($path, $conn){
+        return ftp_size($conn, $path) === -1;
+    }
+
+    /**
+     * Check to see if file ends with given extension
+     * @param $file
+     * @param $extension
+     * @return bool
+     */
+    public static function isFileExtension($file, $extension){
+        return ends_with($file, $extension);
+    }
+
+    /**
+     * Get file content to string
+     * @param $ftp
+     * @param $filename
+     * @return bool|string
+     */
+    public static function getFileToString($conn, $file) {
+        $temp = fopen('php://temp', 'r+');
+        if (@ftp_fget($conn, $temp, $file, FTP_BINARY, 0)) {
+            rewind($temp);
+            return stream_get_contents($temp);
+        }
+        else {
+            return false;
+        }
+    }
+
     /** protected to prevent cloning */
     protected function __clone(){}
 

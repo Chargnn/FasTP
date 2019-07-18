@@ -110,4 +110,26 @@ class FtpController extends Controller
             return redirect('/connect')->withErrors('Credentials are invalid');
         }
     }
+
+    public function see(){
+        $cookie = json_decode(Cookie::get('ftp'));
+
+        if(!$cookie){
+            return redirect('/connect');
+        }
+
+        $conn = Ftp::instance(['host' => $cookie->host, 'port' => $cookie->port]);
+
+        if(!$conn) {
+            return redirect('/connect')->withErrors('Can\'t connect to ftp');
+        }
+
+        $file = request()->route('file');
+        if (ftp_login($conn, $cookie->username, $cookie->password)) {
+            return view('see')->with('text', Ftp::getFileToString($conn, $file));
+
+        } else {
+            return redirect('/connect')->withErrors('Credentials are invalid');
+        }
+    }
 }

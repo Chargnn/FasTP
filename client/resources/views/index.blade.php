@@ -33,23 +33,33 @@
                     <div class="panel-body">
                         <ul class="list-group">
                             @foreach($file_list as $file)
+                                <?php $isDir = \App\Ftp::isDir($file, $conn); ?>
                                 <li class="list-group-item">
                                     <div class="checkbox">
-                                        @if($file !== '.' && $file !== '..')
+                                        @if(!$isDir)
                                             <input type="checkbox" id="checkbox" />
                                         @endif
-                                        @if($file !== '.' && $file !== '..')
+                                        @if(!$isDir)
                                             <small>{{ ftp_mdtm($conn, $file) ? \App\Ftp::formatDate(ftp_mdtm($conn, $file)) : '' }}</small>
                                         @endif
                                         <label for="checkbox">
+                                            @if($isDir)
+                                                <a href="/cd/{{ $file }}">
+                                            @endif
                                             {{ $file }}
+                                            @if($isDir)
+                                                </a>
+                                            @endif
                                         </label>
-                                        @if($file !== '.' && $file !== '..')
+                                        @if(!$isDir)
                                             <small>{{ ftp_size($conn, $file) > 0 ? '('.\App\Ftp::formatSize(ftp_size($conn, $file)).')' : '(0 B)' }}</small>
                                         @endif
                                     </div>
-                                    @if($file !== '.' && $file !== '..')
+                                    @if(!$isDir)
                                         <div class="pull-right action-buttons">
+                                            @if(\App\Ftp::isFileExtension($file, '.txt'))
+                                                <a href="/see/{{ $file }}" class="flag"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                            @endif
                                             <a href="/download/{{ $file }}"><span class="glyphicon glyphicon-download-alt"></span></a>
                                             <a href="/delete/{{ $file }}" class="trash"><span class="glyphicon glyphicon-trash"></span></a>
                                         </div>
