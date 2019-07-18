@@ -76,7 +76,7 @@
                             <div class="col-md-3">
                                 <form action="/upload" method="POST" enctype="multipart/form-data" class="uploadForm">
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-                                    <label for="upload" style="display: flex;"><input type="file" name="upload" class="inputfile" onchange="this.form.submit();" />
+                                    <label for="upload" style="display: flex;"><input type="file" name="uploads[]" class="inputfile" multiple="multiple" onchange="this.form.submit();" />
                                     </label>
                                 </form>
                             </div>

@@ -141,7 +141,7 @@ class FtpController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
      */
     public function upload(){
-        $file = request()->file('upload');
+        $files = request()->file('uploads');
         $cookie = json_decode(Cookie::get('ftp'));
 
         if(!$cookie){
@@ -156,15 +156,12 @@ class FtpController extends Controller
 
         if (ftp_login($conn, $cookie->username, $cookie->password)) {
             $tempDestination = 'uploads/';
-            $file->move($tempDestination, $file->getClientOriginalName());
-            ftp_pasv($conn, true);
-            $upload = ftp_nb_put($conn, '/'.$file->getClientOriginalName(), public_path().'/uploads/'.$file->getClientOriginalName(), FTP_BINARY, FTP_AUTORESUME);
-
-            while (FTP_MOREDATA == $upload) {
-                $upload = ftp_nb_continue($conn);
+            foreach ($files as $file) {
+                $file->move($tempDestination, $file->getClientOriginalName());
+                ftp_pasv($conn, true);
+                ftp_put($conn, '/'.$file->getClientOriginalName(), public_path().'/uploads/'.$file->getClientOriginalName(), FTP_BINARY, FTP_AUTORESUME);
             }
 
-            echo 'uploading...';
             return redirect('/');
         } else {
             return redirect('/connect')->withErrors('Credentials are invalid');
