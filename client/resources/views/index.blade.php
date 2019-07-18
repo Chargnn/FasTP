@@ -70,8 +70,15 @@
                     </div>
                     <div class="panel-footer">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-9">
                                 <h6>Total Count <span class="label label-info">{{ count($file_list) }}</span></h6>
+                            </div>
+                            <div class="col-md-3">
+                                <form action="/upload" method="POST" enctype="multipart/form-data" class="uploadForm">
+                                    <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                                    <label for="upload" style="display: flex;"><input type="file" name="upload" class="inputfile" onchange="this.form.submit();" />
+                                    </label>
+                                </form>
                             </div>
                         </div>
                     </div>

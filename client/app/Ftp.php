@@ -76,6 +76,7 @@ class Ftp
      */
     public static function getFileToString($conn, $file) {
         $temp = fopen('php://temp', 'r+');
+        ftp_pasv($conn, true);
         if (@ftp_fget($conn, $temp, $file, FTP_BINARY, 0)) {
             rewind($temp);
             return stream_get_contents($temp);

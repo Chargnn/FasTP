@@ -111,6 +111,10 @@ class FtpController extends Controller
         }
     }
 
+    /**
+     * See content of file without downloading it to client
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     */
     public function see(){
         $cookie = json_decode(Cookie::get('ftp'));
 
@@ -127,7 +131,41 @@ class FtpController extends Controller
         $file = request()->route('file');
         if (ftp_login($conn, $cookie->username, $cookie->password)) {
             return view('see')->with('text', Ftp::getFileToString($conn, $file));
+        } else {
+            return redirect('/connect')->withErrors('Credentials are invalid');
+        }
+    }
 
+    /**
+     * Upload file to ftp TODO: Do multiple files
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     */
+    public function upload(){
+        $file = request()->file('upload');
+        $cookie = json_decode(Cookie::get('ftp'));
+
+        if(!$cookie){
+            return redirect('/connect');
+        }
+
+        $conn = Ftp::instance(['host' => $cookie->host, 'port' => $cookie->port]);
+
+        if(!$conn) {
+            return redirect('/connect')->withErrors('Can\'t connect to ftp');
+        }
+
+        if (ftp_login($conn, $cookie->username, $cookie->password)) {
+            $tempDestination = 'uploads/';
+            $file->move($tempDestination, $file->getClientOriginalName());
+            ftp_pasv($conn, true);
+            $upload = ftp_nb_put($conn, '/'.$file->getClientOriginalName(), public_path().'/uploads/'.$file->getClientOriginalName(), FTP_BINARY, FTP_AUTORESUME);
+
+            while (FTP_MOREDATA == $upload) {
+                $upload = ftp_nb_continue($conn);
+            }
+
+            echo 'uploading...';
+            return redirect('/');
         } else {
             return redirect('/connect')->withErrors('Credentials are invalid');
         }
