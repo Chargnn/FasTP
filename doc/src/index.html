@@ -42,6 +42,9 @@
                                 <li>
                                     <a href="#firstinstallation">First installation</a>
                                 </li>
+                                <li>
+                                    <a href="#whereistheinformationstored">Where is the information stored</a>
+                                </li>
                             </ul>
                         </div>
                     </li>
@@ -71,8 +74,8 @@
                         source, file structure, build tools, file includes – is documented here, but should you have any
                         questions, always feel free to submit a request <a href="https://github.com/Chargnn/FasTP">Here</a>.</p>
                     <hr class="my-5">
-                    <div class="alert alert-primary d-flex justify-content-start align-items-center" role="alert"><span
-                            class="fa fa-info mr-4"></span>
+                    <div class="alert alert-primary d-flex justify-content-start align-items-center" role="alert">
+                        <span class="fa fa-info mr-4"></span>
                         <p class="m-0">This documentation is always evolving. If you've not been here for a while,
                             perhaps check out the git log.</p>
                     </div>
@@ -102,11 +105,25 @@
                             <strong class="badge badge-danger-soft"><code>php artisan key:generate</code></strong>in client/.
                             Typically, this string should be 32 characters long and set to APP_KEY in your .env file.
                         </li>
-                        <li>Finally, you may need to grant the web server write permissions to the app/storage and app/vendor directories.</li>
+                        <li>Finally, you may need to grant the web server read/write permissions to app/storage, app/vendor and public/uploads directory.</li>
                         <li>
                             You are now set!
                         </li>
                     </ol>
+                    <h3 id="whereistheinformationstored" class="font-weight-bold mb-2">Where is the information stored ?</h3>
+                    <div class="alert alert-primary d-flex justify-content-start align-items-center" role="alert">
+                        <span class="fa fa-info mr-4"></span>
+                        <p class="m-0"><strong>No sensitive information is stored on the server.</strong></p>
+                    </div>
+                    <strong>Ftp connexion:</strong>
+                    <p>All information about the ftp connexion is stored in a cookie called <code>ftp</code> into client browser for 120 minutes. The cookie
+                       contains the host, port, username and password. All of this is encrypted using the application key generated
+                       during your <a href="#firstinstallation">First installation</a>. Without that key, the server cannot encrypt the cookie
+                       and all your ftp credentials will be at risk.</p>
+                    <p>Each time the user wants to see, browse, delete or add files to the ftp server, the server get the cookie and then connect the user.
+                        The ftp connexion is then closed when the content is fetch.</p>
+
+                    <strong>Uploaded files:</strong>
                 </article>
                 <aside class="col-md-3 d-none d-md-block border-left">
                     <div class="widget widget-support-forum p-md-3 p-sm-2"><span class="icon icon-forum"></span>
