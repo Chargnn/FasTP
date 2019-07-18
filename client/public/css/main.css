@@ -1,5 +1,46 @@
+.trash { color:rgb(209, 91, 71); }
+.trash:hover { color:rgb(150, 0, 0); }
+.panel-body { padding:0px; }
+.panel-footer .pagination { margin: 0; }
+.panel .glyphicon,.list-group-item .glyphicon { margin-right:5px; }
+.panel-body .radio, .checkbox { display:inline-block;margin:0px; }
+.panel-body input[type=checkbox]:checked + label { font-weight: bold; }
+.list-group-item:hover, a.list-group-item:focus {text-decoration: none;background-color: rgb(245, 245, 245);}
+.list-group { margin-bottom:0px; }
+.btn { margin-right: 5px; }
 
-
+.inputfile {
+  color: transparent;
+  width: 200px;
+}
+.inputfile::-webkit-file-upload-button {
+  visibility: hidden;
+}
+.inputfile::before {
+  content: 'Select some files to upload';
+  color: black;
+  display: inline-block;
+  background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
+  border: 1px solid #999;
+  border-radius: 3px;
+  padding: 5px 8px;
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  cursor: pointer;
+  text-shadow: 1px 1px #fff;
+  font-weight: 700;
+  font-size: 10pt;
+}
+.inputfile:hover::before {
+  border-color: black;
+}
+.inputfile:active {
+  outline: 0;
+}
+.inputfile:active::before {
+  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+}
 
 
 /*//////////////////////////////////////////////////////////////////
@@ -36,12 +77,10 @@
 
 body, html {
 	height: 100%;
-	font-family: Raleway-Regular, sans-serif;
 }
 
 /*---------------------------------------------*/
 a {
-	font-family: Raleway-Regular;
 	font-size: 14px;
 	line-height: 1.7;
 	color: #666666;
