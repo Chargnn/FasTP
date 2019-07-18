@@ -19,5 +19,6 @@ Route::get('/delete/{file}', 'FtpController@delete')->name('delete');
 Route::get('/see/{file}', 'FtpController@see')->name('see');
 Route::post('/upload', 'FtpController@upload')->name('upload');
 Route::post('/browse', 'FtpController@browse')->name('browse');
+Route::post('/createDir', 'FtpController@createDir')->name('createDir');
 
 Route::get('/', 'HomeController@index')->name('listing');

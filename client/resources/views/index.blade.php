@@ -37,7 +37,7 @@
                                 <li class="list-group-item">
                                     <div class="checkbox">
                                         @if(!$isDir)
-                                            <input type="checkbox" id="checkbox" />
+                                            <!--<input type="checkbox" id="checkbox" />-->
                                         @endif
                                         @if(!$isDir)
                                             <small>{{ ftp_mdtm($conn, $file) ? \App\Ftp::formatDate(ftp_mdtm($conn, $file)) : '' }}</small>
@@ -71,13 +71,20 @@
                     </div>
                     <div class="panel-footer">
                         <div class="row">
-                            <div class="col-md-9">
+                            <div class="col-md-6">
                                 <h6>Total Count <span class="label label-info">{{ count($file_list) }}</span></h6>
                             </div>
                             <div class="col-md-3">
                                 <form action="/upload" method="POST" enctype="multipart/form-data" class="uploadForm">
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                                     <label for="upload" style="display: flex;"><input type="file" name="uploads[]" class="inputfile" multiple="multiple" onchange="this.form.submit();" />
+                                    </label>
+                                </form>
+                            </div>
+                            <div class="col-md-3">
+                                <form action="/createDir" method="POST" class="createDir">
+                                    <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                                    <label for="createDir" style="display: flex;">Create a directory: <input type="text" name="dir" onkeyup="if (event.keyCode === 13) {this.form.submit();}" />
                                     </label>
                                 </form>
                             </div>
