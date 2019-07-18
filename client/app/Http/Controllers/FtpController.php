@@ -7,6 +7,7 @@ use http\Env\Request;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Redirect;
 
 class FtpController extends Controller
 {
@@ -163,6 +164,31 @@ class FtpController extends Controller
             }
 
             return redirect('/');
+        } else {
+            return redirect('/connect')->withErrors('Credentials are invalid');
+        }
+    }
+
+    /**
+     * Change current location to given path
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function browse(){
+        $to = request()->path;
+        $cookie = json_decode(Cookie::get('ftp'));
+
+        if(!$cookie){
+            return redirect('/connect');
+        }
+
+        $conn = Ftp::instance(['host' => $cookie->host, 'port' => $cookie->port]);
+
+        if(!$conn) {
+            return redirect('/connect')->withErrors('Can\'t connect to ftp');
+        }
+
+        if (ftp_login($conn, $cookie->username, $cookie->password)) {
+            return redirect()->route('listing')->with('path', $to);
         } else {
             return redirect('/connect')->withErrors('Credentials are invalid');
         }

@@ -25,6 +25,10 @@ class HomeController extends Controller
         }
 
         if (ftp_login($conn, $cookie->username, $cookie->password)) {
+            if($to = session()->get('path')){
+                $to = ftp_pwd($conn).$to;
+                ftp_chdir($conn, $to);
+            }
             ftp_pasv($conn, true);
             $file_list = ftp_nlist($conn, ".");
             return view('index')->with('file_list', $file_list)

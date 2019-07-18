@@ -44,11 +44,12 @@
                                         @endif
                                         <label for="checkbox">
                                             @if($isDir)
-                                                <a href="/cd/{{ $file }}">
-                                            @endif
-                                            {{ $file }}
-                                            @if($isDir)
-                                                </a>
+                                                <form action="/browse" method="POST">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                                                    <button type="submit" name="path" value="{{ (ends_with(ftp_pwd($conn), '/') ? ftp_pwd($conn): ftp_pwd($conn).'/').$file }}" class="btn-link">{{ $file }}</button>
+                                                </form>
+                                            @else
+                                                {{ $file }}
                                             @endif
                                         </label>
                                         @if(!$isDir)
@@ -57,7 +58,7 @@
                                     </div>
                                     @if(!$isDir)
                                         <div class="pull-right action-buttons">
-                                            @if(\App\Ftp::isFileExtension($file, '.txt'))
+                                            @if(\App\Ftp::isFileExtension($file, '.txt') || \App\Ftp::isFileExtension($file, '.json'))
                                                 <a href="/see/{{ $file }}" class="flag"><span class="glyphicon glyphicon-eye-open"></span></a>
                                             @endif
                                             <a href="/download/{{ $file }}"><span class="glyphicon glyphicon-download-alt"></span></a>
