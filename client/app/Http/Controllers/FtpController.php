@@ -209,7 +209,7 @@ class FtpController extends Controller
         }
 
         if (ftp_login($conn, $cookie->username, $cookie->password)) {
-            ftp_mkdir($conn, (ends_with(ftp_pwd($conn), '/') ? ftp_pwd($conn): ftp_pwd($conn).'/').$dir))
+            ftp_mkdir($conn, (ends_with(ftp_pwd($conn), '/') ? ftp_pwd($conn): ftp_pwd($conn).'/').$dir);
             return redirect('/');
         } else {
             return redirect('/connect')->withErrors('Credentials are invalid');
