@@ -29,6 +29,16 @@
                                 </button>
                             </div>
                         </div>
+                        <div class="pull-right action-buttons">
+                            <div class="btn-group pull-right">
+                                <button type="button" class="btn btn-default btn-xs">
+                                    <span class="glyphicon glyphicon-search" style="margin-right: 0px;"></span>
+                                </button>
+                                <ul class="dropdown-menu slidedown">
+                                    <li>Search<input type="text" /></li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                     <div class="panel-body">
                         <ul class="list-group">

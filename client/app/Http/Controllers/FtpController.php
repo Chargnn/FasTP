@@ -59,6 +59,7 @@ class FtpController extends Controller
      */
     public function download(){
         $cookie = json_decode(Cookie::get('ftp'));
+        $path = Session::get('path') ?: '/';
 
         if(!$cookie){
             return redirect('/connect');
@@ -72,15 +73,18 @@ class FtpController extends Controller
 
         $file = request()->route('file');
         if (ftp_login($conn, $cookie->username, $cookie->password)) {
+            if(!ends_with($path, '/')){
+                $path = $path.'/';
+            }
+
             ftp_pasv($conn, true);
-            $size = ftp_size($conn, $file);
+            $size = ftp_size($conn, $path.$file);
 
             header("Content-Type: application/octet-stream");
             header("Content-Disposition: attachment; filename=" . basename($file));
             header("Content-Length: $size");
 
-            ftp_get($conn, 'php://output', $file, FTP_BINARY);
-
+            ftp_get($conn, 'php://output', $path.$file, FTP_BINARY);
         } else {
             return redirect('/connect')->withErrors('Credentials are invalid');
         }
@@ -212,12 +216,12 @@ class FtpController extends Controller
             return redirect('/connect')->withErrors('Can\'t connect to ftp');
         }
 
+
         if (ftp_login($conn, $cookie->username, $cookie->password)) {
             if(ends_with($path, '/')){
                 ftp_mkdir($conn, $path.$dir);
             } else {
                 ftp_mkdir($conn, $path.'/'.$dir);
-
             }
             return redirect('/');
         } else {
