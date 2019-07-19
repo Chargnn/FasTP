@@ -50,7 +50,7 @@
 						Port
 					</span>
 					<div class="wrap-input100 m-b-12">
-						<input class="input100" type="number" name="port" min="0" max="65525"/>
+						<input class="input100" type="number" name="port" min="0" max="65525" placeholder="21"/>
 						<span class="focus-input100"></span>
 					</div>
 

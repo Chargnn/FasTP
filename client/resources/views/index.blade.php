@@ -11,7 +11,7 @@
             <div class="col-md-12">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        Files list - {{ ftp_pwd($conn) }} - {{ ftp_systype($conn) }}
+                        Files list - {{ Session::get('path') ?: '/' }} - {{ ftp_systype($conn) }}
                         <div class="pull-right action-buttons">
                             <div class="btn-group pull-right">
                                 <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
@@ -29,6 +29,16 @@
                                 </button>
                             </div>
                         </div>
+                        <div class="pull-right action-buttons">
+                            <div class="btn-group pull-right">
+                                <button type="button" class="btn btn-default btn-xs">
+                                    <span class="glyphicon glyphicon-search" style="margin-right: 0px;"></span>
+                                </button>
+                                <ul class="dropdown-menu slidedown">
+                                    <li>Search<input type="text" /></li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                     <div class="panel-body">
                         <ul class="list-group">
@@ -37,18 +47,19 @@
                                 <li class="list-group-item">
                                     <div class="checkbox">
                                         @if(!$isDir)
-                                            <input type="checkbox" id="checkbox" />
+                                            <!--<input type="checkbox" id="checkbox" />-->
                                         @endif
                                         @if(!$isDir)
                                             <small>{{ ftp_mdtm($conn, $file) ? \App\Ftp::formatDate(ftp_mdtm($conn, $file)) : '' }}</small>
                                         @endif
                                         <label for="checkbox">
                                             @if($isDir)
-                                                <a href="/cd/{{ $file }}">
-                                            @endif
-                                            {{ $file }}
-                                            @if($isDir)
-                                                </a>
+                                                <form action="/browse" method="POST">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                                                    <button type="submit" name="path" value="{{ (ends_with(ftp_pwd($conn), '/') ? ftp_pwd($conn): ftp_pwd($conn).'/').$file }}" class="btn-link">{{ $file }}</button>
+                                                </form>
+                                            @else
+                                                {{ $file }}
                                             @endif
                                         </label>
                                         @if(!$isDir)
@@ -57,7 +68,7 @@
                                     </div>
                                     @if(!$isDir)
                                         <div class="pull-right action-buttons">
-                                            @if(\App\Ftp::isFileExtension($file, '.txt'))
+                                            @if(\App\Ftp::isFileExtension($file, '.txt') || \App\Ftp::isFileExtension($file, '.json'))
                                                 <a href="/see/{{ $file }}" class="flag"><span class="glyphicon glyphicon-eye-open"></span></a>
                                             @endif
                                             <a href="/download/{{ $file }}"><span class="glyphicon glyphicon-download-alt"></span></a>
@@ -70,13 +81,20 @@
                     </div>
                     <div class="panel-footer">
                         <div class="row">
-                            <div class="col-md-9">
+                            <div class="col-md-6">
                                 <h6>Total Count <span class="label label-info">{{ count($file_list) }}</span></h6>
                             </div>
                             <div class="col-md-3">
                                 <form action="/upload" method="POST" enctype="multipart/form-data" class="uploadForm">
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                                     <label for="upload" style="display: flex;"><input type="file" name="uploads[]" class="inputfile" multiple="multiple" onchange="this.form.submit();" />
+                                    </label>
+                                </form>
+                            </div>
+                            <div class="col-md-3">
+                                <form action="/createDir" method="POST" class="createDir">
+                                    <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                                    <label for="createDir" style="display: flex;">Create a directory: <input type="text" name="dir" onkeyup="if (event.keyCode === 13) {this.form.submit();}" />
                                     </label>
                                 </form>
                             </div>
