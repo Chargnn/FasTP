@@ -163,6 +163,9 @@ class FtpController extends Controller
 
         if (ftp_login($conn, $cookie->username, $cookie->password)) {
             $tempDestination = 'uploads/';
+            if(!ends_with($path, '/')){
+                $path = $path.'/';
+            }
             foreach ($files as $file) {
                 $file->move($tempDestination, $file->getClientOriginalName());
                 ftp_pasv($conn, true);
