@@ -11,7 +11,7 @@
             <div class="col-md-12">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        Files list - {{ ftp_pwd($conn) }} - {{ ftp_systype($conn) }}
+                        Files list - {{ Session::get('path') ?: '/' }} - {{ ftp_systype($conn) }}
                         <div class="pull-right action-buttons">
                             <div class="btn-group pull-right">
                                 <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">

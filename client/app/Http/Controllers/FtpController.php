@@ -8,6 +8,7 @@ use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 
 class FtpController extends Controller
 {
@@ -138,11 +139,12 @@ class FtpController extends Controller
     }
 
     /**
-     * Upload file to ftp TODO: Do multiple files
+     * Upload file to ftp
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
      */
     public function upload(){
         $files = request()->file('uploads');
+        $path = Session::get('path') ?: '/';
         $cookie = json_decode(Cookie::get('ftp'));
 
         if(!$cookie){
@@ -160,7 +162,7 @@ class FtpController extends Controller
             foreach ($files as $file) {
                 $file->move($tempDestination, $file->getClientOriginalName());
                 ftp_pasv($conn, true);
-                ftp_put($conn, '/'.$file->getClientOriginalName(), public_path().'/uploads/'.$file->getClientOriginalName(), FTP_BINARY, FTP_AUTORESUME);
+                ftp_put($conn, $path.$file->getClientOriginalName(), public_path().'/uploads/'.$file->getClientOriginalName(), FTP_BINARY, FTP_AUTORESUME);
             }
 
             return redirect('/');
@@ -188,7 +190,8 @@ class FtpController extends Controller
         }
 
         if (ftp_login($conn, $cookie->username, $cookie->password)) {
-            return redirect()->route('listing')->with('path', $to);
+            session(['path' => $to]);
+            return redirect()->route('listing');
         } else {
             return redirect('/connect')->withErrors('Credentials are invalid');
         }
@@ -196,6 +199,7 @@ class FtpController extends Controller
 
     public function createDir(){
         $dir = request()->dir;
+        $path = session('path') ?: '/';
         $cookie = json_decode(Cookie::get('ftp'));
 
         if(!$cookie){
@@ -209,7 +213,12 @@ class FtpController extends Controller
         }
 
         if (ftp_login($conn, $cookie->username, $cookie->password)) {
-            ftp_mkdir($conn, (ends_with(ftp_pwd($conn), '/') ? ftp_pwd($conn): ftp_pwd($conn).'/').$dir);
+            if(ends_with($path, '/')){
+                ftp_mkdir($conn, $path.$dir);
+            } else {
+                ftp_mkdir($conn, $path.'/'.$dir);
+
+            }
             return redirect('/');
         } else {
             return redirect('/connect')->withErrors('Credentials are invalid');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Ftp;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller
 {
@@ -13,6 +14,7 @@ class HomeController extends Controller
      */
     public function index(){
         $cookie = json_decode(Cookie::get('ftp'));
+        $path = session('path');
 
         if(!$cookie){
             return redirect('/connect');
@@ -25,15 +27,15 @@ class HomeController extends Controller
         }
 
         if (ftp_login($conn, $cookie->username, $cookie->password)) {
-            if($to = session()->get('path')){
-                $to = ftp_pwd($conn).$to;
-                ftp_chdir($conn, $to);
-            }
             ftp_pasv($conn, true);
-            $file_list = ftp_nlist($conn, ".");
+            if($path){
+                ftp_chdir($conn, $path);
+                $file_list = ftp_nlist($conn, $path);
+            } else {
+                $file_list = ftp_nlist($conn, '/');
+            }
             return view('index')->with('file_list', $file_list)
-                                      ->with('conn', $conn)
-                                      ->with('credentials', $cookie);
+                                      ->with('conn', $conn);
         } else {
             return redirect('/connect')->withErrors('Credentials are invalid');
         }
