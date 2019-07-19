@@ -3,11 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Ftp;
-use http\Env\Request;
-use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
 class FtpController extends Controller
@@ -28,6 +24,7 @@ class FtpController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
      */
     public function connect(){
+        session()->forget('path');
         $request_values = ['host' => request('host'),
                            'port' => request('port'),
                            'username' => request('username'),
@@ -50,6 +47,7 @@ class FtpController extends Controller
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function disconnect(){
+        session()->forget('path');
         return redirect('/connect')->withCookie(Cookie::make('ftp', '', -1));
     }
 

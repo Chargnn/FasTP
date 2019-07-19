@@ -1,7 +1,7 @@
 @extends('layout.layout')
 
 @section('header')
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <link rel="stylesheet" type="text/css" href="/css/main.css" />
 @endsection
 
@@ -14,29 +14,26 @@
                         Files list - {{ Session::get('path') ?: '/' }} - {{ ftp_systype($conn) }}
                         <div class="pull-right action-buttons">
                             <div class="btn-group pull-right">
-                                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                <button tabindex="0" name="Settings" type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                                     <span class="glyphicon glyphicon-cog" style="margin-right: 0px;"></span>
                                 </button>
                                 <ul class="dropdown-menu slidedown">
-                                    <li><a href="/disconnect" onclick="if(!confirm('Are you sure?')){ return false; }"><span class="glyphicon glyphicon-log-out"></span>Disconnect</a></li>
+                                    <li><a href="/disconnect" title="Disconnect" onclick="if(!confirm('Are you sure?')){ return false; }"><span class="glyphicon glyphicon-log-out"></span>Disconnect</a></li>
                                 </ul>
                             </div>
                         </div>
                         <div class="pull-right action-buttons">
                             <div class="btn-group pull-right">
-                                <button type="button" class="btn btn-default btn-xs" onclick="location.reload()">
+                                <button tabindex="1" name="Reload" type="button" class="btn btn-default btn-xs" onclick="location.reload()">
                                     <span class="glyphicon glyphicon-refresh" style="margin-right: 0px;"></span>
                                 </button>
                             </div>
                         </div>
                         <div class="pull-right action-buttons">
                             <div class="btn-group pull-right">
-                                <button type="button" class="btn btn-default btn-xs">
+                                <button tabindex="2" name="Search" type="button" class="btn btn-default btn-xs">
                                     <span class="glyphicon glyphicon-search" style="margin-right: 0px;"></span>
                                 </button>
-                                <ul class="dropdown-menu slidedown">
-                                    <li>Search<input type="text" /></li>
-                                </ul>
                             </div>
                         </div>
                     </div>
@@ -69,10 +66,10 @@
                                     @if(!$isDir)
                                         <div class="pull-right action-buttons">
                                             @if(\App\Ftp::isFileExtension($file, '.txt') || \App\Ftp::isFileExtension($file, '.json'))
-                                                <a href="/see/{{ $file }}" class="flag"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                                <a href="/see/{{ $file }}" title="Preview the file" class="flag"><span class="glyphicon glyphicon-eye-open"></span></a>
                                             @endif
-                                            <a href="/download/{{ $file }}"><span class="glyphicon glyphicon-download-alt"></span></a>
-                                            <a href="/delete/{{ $file }}" class="trash"><span class="glyphicon glyphicon-trash"></span></a>
+                                            <a href="/download/{{ $file }}" title="Download the file" ><span class="glyphicon glyphicon-download-alt"></span></a>
+                                            <a href="/delete/{{ $file }}" title="Delete the file" class="trash"><span class="glyphicon glyphicon-trash"></span></a>
                                         </div>
                                     @endif
                                 </li>
@@ -87,14 +84,14 @@
                             <div class="col-md-3">
                                 <form action="/upload" method="POST" enctype="multipart/form-data" class="uploadForm">
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-                                    <label for="upload" style="display: flex;"><input type="file" name="uploads[]" class="inputfile" multiple="multiple" onchange="this.form.submit();" />
+                                    <label for="uploads[]" style="display: flex;"><input type="file" name="uploads[]" class="inputfile" multiple="multiple" onchange="this.form.submit();" required />
                                     </label>
                                 </form>
                             </div>
                             <div class="col-md-3">
                                 <form action="/createDir" method="POST" class="createDir">
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-                                    <label for="createDir" style="display: flex;">Create a directory: <input type="text" name="dir" onkeyup="if (event.keyCode === 13) {this.form.submit();}" />
+                                    <label for="dir" style="display: flex;">Create a directory: <input type="text" name="dir" onkeyup="if (event.keyCode === 13) {this.form.submit();}" required />
                                     </label>
                                 </form>
                             </div>
@@ -107,6 +104,6 @@
 @endsection
 
 @section('footer')
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 @endsection
