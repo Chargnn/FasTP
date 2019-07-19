@@ -24,14 +24,14 @@
                         </div>
                         <div class="pull-right action-buttons">
                             <div class="btn-group pull-right">
-                                <button tabindex="1" name="Reload" type="button" class="btn btn-default btn-xs" onclick="location.reload()">
+                                <button tabindex="0" name="Reload" type="button" class="btn btn-default btn-xs" onclick="location.reload()">
                                     <span class="glyphicon glyphicon-refresh" style="margin-right: 0px;"></span>
                                 </button>
                             </div>
                         </div>
                         <div class="pull-right action-buttons">
                             <div class="btn-group pull-right">
-                                <button tabindex="2" name="Search" type="button" class="btn btn-default btn-xs">
+                                <button tabindex="0" name="Search" type="button" class="btn btn-default btn-xs">
                                     <span class="glyphicon glyphicon-search" style="margin-right: 0px;"></span>
                                 </button>
                             </div>
@@ -79,14 +79,16 @@
                             <div class="col-md-3">
                                 <form action="/upload" method="POST" enctype="multipart/form-data" class="uploadForm">
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-                                    <label for="uploads[]" style="display: flex;"><input type="file" name="uploads[]" class="inputfile" multiple="multiple" onchange="this.form.submit();" required />
+                                    <label for="uploads[]" style="display: flex;">
+                                        <input type="file" name="uploads[]" class="inputfile" multiple="multiple" onchange="this.form.submit();" required />
                                     </label>
                                 </form>
                             </div>
                             <div class="col-md-3">
                                 <form action="/createDir" method="POST" class="createDir">
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-                                    <label for="dir" style="display: flex;">Create a directory: <input type="text" name="dir" onkeyup="if (event.keyCode === 13) {this.form.submit();}" required />
+                                    <label for="dir" style="display: flex;">Create a directory:
+                                        <input type="text" name="dir" onkeyup="if (event.keyCode === 13) {this.form.submit();}" required />
                                     </label>
                                 </form>
                             </div>
