@@ -30,11 +30,12 @@
                             </div>
                         </div>
                         <div class="pull-right action-buttons">
-                            <div class="btn-group pull-right">
-                                <button tabindex="0" name="Search" type="button" class="btn btn-default btn-xs">
-                                    <span class="glyphicon glyphicon-search" style="margin-right: 0px;"></span>
-                                </button>
-                            </div>
+                            <form action="/search" method="POST">
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                                <label for="file" style="display: flex;">Search:
+                                    <input type="text" name="file" onkeyup="if (event.keyCode === 13) {this.form.submit();}" required />
+                                </label>
+                            </form>
                         </div>
                     </div>
                     <div class="panel-body">

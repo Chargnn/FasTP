@@ -202,6 +202,10 @@ class FtpController extends Controller
         }
     }
 
+    /**
+     * Create a directory in current path
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function createDir(){
         $dir = request()->dir;
         $path = session('path') ?: '/';
@@ -229,4 +233,29 @@ class FtpController extends Controller
             return redirect('/connect')->withErrors('Credentials are invalid');
         }
     }
+
+    public function search(){
+        $file = request()->file;
+        $cookie = json_decode(Cookie::get('ftp'));
+
+        if(!$cookie){
+            return redirect('/connect');
+        }
+
+        $conn = Ftp::instance(['host' => $cookie->host, 'port' => $cookie->port]);
+
+        if(!$conn) {
+            return redirect('/connect')->withErrors('Can\'t connect to ftp');
+        }
+
+
+        if (ftp_login($conn, $cookie->username, $cookie->password)) {
+            ftp_pasv($conn, true);
+            var_dump(Ftp::searchFile($conn, '/', $file));
+            return redirect('/');
+        } else {
+            return redirect('/connect')->withErrors('Credentials are invalid');
+        }
+    }
+
 }

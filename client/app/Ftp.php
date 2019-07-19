@@ -54,7 +54,7 @@ class Ftp
      * @param $conn
      * @return bool
      */
-    public static function isDir($path, $conn){
+    public static function isDir($conn, $path){
         return ftp_size($conn, $path) === -1;
     }
 
@@ -84,6 +84,30 @@ class Ftp
         else {
             return false;
         }
+    }
+
+    /**
+     * Search a file recursively through all the ftp directories
+     * @param $conn
+     * @param $path
+     * @param $file
+     * @return mixed
+     */
+    public static function searchFile($conn, $path, $file){
+        $list = ftp_nlist($conn, $path);
+        $dirs = [];
+
+        foreach($list as $item){
+            if($file === $item)
+                return $path;
+
+            if(Ftp::isDir($conn, $item)){
+                $dirs[] = $item;
+            }
+        }
+
+        var_dump($dirs);
+            die;
     }
 
     /** protected to prevent cloning */
