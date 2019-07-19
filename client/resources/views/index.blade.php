@@ -43,12 +43,6 @@
                                 <?php $isDir = \App\Ftp::isDir($file, $conn); ?>
                                 <li class="list-group-item">
                                     <div class="checkbox">
-                                        @if(!$isDir)
-                                            <!--<input type="checkbox" id="checkbox" />-->
-                                        @endif
-                                        @if(!$isDir)
-                                            <small>{{ ftp_mdtm($conn, $file) ? \App\Ftp::formatDate(ftp_mdtm($conn, $file)) : '' }}</small>
-                                        @endif
                                         <label for="checkbox">
                                             @if($isDir)
                                                 <form action="/browse" method="POST">
@@ -56,10 +50,11 @@
                                                     <button type="submit" name="path" value="{{ (ends_with(ftp_pwd($conn), '/') ? ftp_pwd($conn): ftp_pwd($conn).'/').$file }}" class="btn-link">{{ $file }}</button>
                                                 </form>
                                             @else
-                                                {{ $file }}
+                                                <p>{{ $file }}</p>
                                             @endif
                                         </label>
                                         @if(!$isDir)
+                                            <small>{{ ftp_mdtm($conn, $file) ? \App\Ftp::formatDate(ftp_mdtm($conn, $file)) : '' }}</small><br />
                                             <small>{{ ftp_size($conn, $file) > 0 ? '('.\App\Ftp::formatSize(ftp_size($conn, $file)).')' : '(0 B)' }}</small>
                                         @endif
                                     </div>
