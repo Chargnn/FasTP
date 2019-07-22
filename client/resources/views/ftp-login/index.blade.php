@@ -65,7 +65,7 @@
 					</div>-->
 
 					<div class="container-login100-form-btn">
-						<button class="login100-form-btn">
+						<button name="Connect" class="login100-form-btn">
 							Connect
 						</button>
 					</div>

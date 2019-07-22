@@ -3,11 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Ftp;
-use http\Env\Request;
-use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
 class FtpController extends Controller
@@ -28,6 +24,7 @@ class FtpController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
      */
     public function connect(){
+        session()->forget('path');
         $request_values = ['host' => request('host'),
                            'port' => request('port'),
                            'username' => request('username'),
@@ -50,6 +47,7 @@ class FtpController extends Controller
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function disconnect(){
+        session()->forget('path');
         return redirect('/connect')->withCookie(Cookie::make('ftp', '', -1));
     }
 
@@ -204,6 +202,10 @@ class FtpController extends Controller
         }
     }
 
+    /**
+     * Create a directory in current path
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function createDir(){
         $dir = request()->dir;
         $path = session('path') ?: '/';
@@ -231,4 +233,29 @@ class FtpController extends Controller
             return redirect('/connect')->withErrors('Credentials are invalid');
         }
     }
+
+    public function search(){
+        $file = request()->file;
+        $cookie = json_decode(Cookie::get('ftp'));
+
+        if(!$cookie){
+            return redirect('/connect');
+        }
+
+        $conn = Ftp::instance(['host' => $cookie->host, 'port' => $cookie->port]);
+
+        if(!$conn) {
+            return redirect('/connect')->withErrors('Can\'t connect to ftp');
+        }
+
+
+        if (ftp_login($conn, $cookie->username, $cookie->password)) {
+            ftp_pasv($conn, true);
+            var_dump(Ftp::searchFile($conn, '/', $file));
+            return redirect('/');
+        } else {
+            return redirect('/connect')->withErrors('Credentials are invalid');
+        }
+    }
+
 }
