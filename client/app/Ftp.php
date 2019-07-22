@@ -94,33 +94,34 @@ class Ftp
      * @return mixed
      */
     public static function searchFile($conn, $search, $dirs = []){
-        if($dirs){
-            $dir = $dirs[0];
-            unset($dirs[0]);
-            ftp_chdir($conn, $dir);
+        dd(Ftp::recursiveListDirectories($conn, '/'));
+    }
 
-            $files = ftp_nlist($conn, $dir);
-            foreach($files as $file){
-                if($file === $search)
-                    return $dir;
+    public static function recursiveListDirectories($conn, $path)
+    {
+        $lines = ftp_rawlist($conn, $path);
 
-                if(Ftp::isDir($conn, $file)){
-                    $dirs[] = $file;
-                }
+        $result = array();
+
+        foreach ($lines as $line)
+        {
+            $tokens = explode(" ", $line);
+            $name = $tokens[count($tokens) - 1];
+            $type = $tokens[0][0];
+            $filepath = $path . '/' . $name;
+
+            if ($type === 'd' && $name !== '.' && $name !== '..')
+            {
+                $result = array_merge($result, self::recursiveListDirectories($conn, $filepath));
             }
-        } else {
-            $files = ftp_nlist($conn, '/');
-            foreach($files as $file){
-                if($file === $search)
-                    return '/';
-
-                if(Ftp::isDir($conn, $file)){
-                    $dirs[] = $file;
-                }
+            else
+            {
+                if(!in_array($path, $result))
+                    $result[] = $path;
             }
         }
 
-        self::searchFile($conn, $search, $dirs);
+        return $result;
     }
 
     /** protected to prevent cloning */
