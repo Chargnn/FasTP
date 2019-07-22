@@ -251,7 +251,8 @@ class FtpController extends Controller
 
         if (ftp_login($conn, $cookie->username, $cookie->password)) {
             ftp_pasv($conn, true);
-            var_dump(Ftp::searchFile($conn, '/', $file));
+            var_dump(Ftp::searchFile($conn, '/'));
+            die;
             return redirect('/');
         } else {
             return redirect('/connect')->withErrors('Credentials are invalid');

@@ -29,7 +29,11 @@ class HomeController extends Controller
         if (ftp_login($conn, $cookie->username, $cookie->password)) {
             ftp_pasv($conn, true);
             if($path){
-                ftp_chdir($conn, $path);
+                try {
+                    ftp_chdir($conn, $path);
+                } catch(\Exception $e){
+                    ftp_chdir($conn, '/');
+                }
                 $file_list = ftp_nlist($conn, $path);
             } else {
                 $file_list = ftp_nlist($conn, '/');

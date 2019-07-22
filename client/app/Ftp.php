@@ -93,21 +93,34 @@ class Ftp
      * @param $file
      * @return mixed
      */
-    public static function searchFile($conn, $path, $file){
-        $list = ftp_nlist($conn, $path);
-        $dirs = [];
+    public static function searchFile($conn, $search, $dirs = []){
+        if($dirs){
+            $dir = $dirs[0];
+            unset($dirs[0]);
+            ftp_chdir($conn, $dir);
 
-        foreach($list as $item){
-            if($file === $item)
-                return $path;
+            $files = ftp_nlist($conn, $dir);
+            foreach($files as $file){
+                if($file === $search)
+                    return $dir;
 
-            if(Ftp::isDir($conn, $item)){
-                $dirs[] = $item;
+                if(Ftp::isDir($conn, $file)){
+                    $dirs[] = $file;
+                }
+            }
+        } else {
+            $files = ftp_nlist($conn, '/');
+            foreach($files as $file){
+                if($file === $search)
+                    return '/';
+
+                if(Ftp::isDir($conn, $file)){
+                    $dirs[] = $file;
+                }
             }
         }
 
-        var_dump($dirs);
-            die;
+        self::searchFile($conn, $search, $dirs);
     }
 
     /** protected to prevent cloning */

@@ -39,7 +39,7 @@
                             <form action="/search" method="POST">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                                 <label for="file" style="display: flex; margin-right:5px">
-                                    <input type="text" name="file" placeholder="Search file" onkeyup="if (event.keyCode === 13) {this.form.submit();}" required />
+                                    <input type="text" name="file" placeholder="Search file" style="color: #000;" onkeyup="if (event.keyCode === 13) {this.form.submit();}" required />
                                 </label>
                             </form>
                         </div>
