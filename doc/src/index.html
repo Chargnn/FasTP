@@ -122,8 +122,14 @@
                        and all your ftp credentials will be at risk.</p>
                     <p>Each time the user wants to see, browse, delete or add files to the ftp server, the server get the cookie and then connect the user.
                         The ftp connexion is then closed when the content is fetch.</p>
+                    <p>The last path browsed in the ftp server is stored in a session, if the path is invalid, the user is redirected to root (/)</p>
 
                     <strong>Uploaded files:</strong>
+                    <p>Uploaded files are stored in client/public/uploads and you may want to setup a cron job to clean that folder once in a while.
+                       The content of the files aren't encrypted and is at the user discretion to not upload any sensitive data.</p>
+
+                    <strong>Downloaded files:</strong>
+                    <p>Downloaded files are temporarily stored in <code>php://temp</code> and then given to user browser.</p>
                 </article>
                 <aside class="col-md-3 d-none d-md-block border-left">
                     <div class="widget widget-support-forum p-md-3 p-sm-2"><span class="icon icon-forum"></span>
