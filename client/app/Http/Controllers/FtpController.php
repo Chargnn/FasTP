@@ -236,6 +236,7 @@ class FtpController extends Controller
 
     public function search(){
         $file = request()->file;
+        $path = session('path') ?: '/';
         $cookie = json_decode(Cookie::get('ftp'));
 
         if(!$cookie){
@@ -251,8 +252,12 @@ class FtpController extends Controller
 
         if (ftp_login($conn, $cookie->username, $cookie->password)) {
             ftp_pasv($conn, true);
-            $path = Ftp::searchFile($conn, $file);
-            return redirect('/')->with('path', $path)->with('search', $file);
+            $search = Ftp::searchFile($conn, $file);
+            if($search) {
+                return redirect('/')->with('path', $search)->with('search', $file);
+            } else {
+                return redirect('/')->with('path', $path)->withErrors('Could not found file');
+            }
         } else {
             return redirect('/connect')->withErrors('Credentials are invalid');
         }
