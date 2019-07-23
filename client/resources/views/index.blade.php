@@ -113,6 +113,7 @@
                                 </table>
                             </div>
                         </div>
+                        <small>{{ 'v-' . env('APP_VERSION') }}</small>
                     </div>
                 </div>
             </div>
