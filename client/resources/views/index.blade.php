@@ -39,7 +39,7 @@
                             <form action="/search" method="POST">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                                 <label for="file" style="display: flex; margin-right:5px">
-                                    <input type="text" name="file" placeholder="Search file" onkeyup="if (event.keyCode === 13) {this.form.submit();}" required />
+                                    <input type="text" name="file" placeholder="Search file" style="color: #000;" onkeyup="if (event.keyCode === 13) {this.form.submit();}" required />
                                 </label>
                             </form>
                         </div>
@@ -57,16 +57,18 @@
                                         <td width="10%"></td>
                                         <td width="10%"></td>
                                     @endif
-                                    @if($isDir)
-                                        <td width="100%">
-                                            <form action="/browse" method="POST">
-                                                <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-                                                <button type="submit" name="path" value="{{ (ends_with(ftp_pwd($conn), '/') ? ftp_pwd($conn): ftp_pwd($conn).'/').$file }}" class="btn-link">{{ $file }}</button>
-                                            </form>
-                                        </td>
-                                    @else
-                                        <td width="70%">{{ $file }}</td>
-                                    @endif
+                                    <div >
+                                        @if($isDir)
+                                            <td width="100%" @if($file === $search) bgcolor="#90ee90" @endif>
+                                                <form action="/browse" method="POST">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                                                    <button type="submit" name="path" value="{{ (ends_with(ftp_pwd($conn), '/') ? ftp_pwd($conn): ftp_pwd($conn).'/').$file }}" class="btn-link">{{ $file }}</button>
+                                                </form>
+                                            </td>
+                                        @else
+                                            <td width="70%" @if($file === $search) bgcolor="#90ee90" @endif>{{ $file }}</td>
+                                        @endif
+                                    </div>
                                     @if(!$isDir)
                                         <td class="pull-right" width="85px">
                                             @if(\App\Ftp::isFileExtension($file, '.txt') || \App\Ftp::isFileExtension($file, '.json'))

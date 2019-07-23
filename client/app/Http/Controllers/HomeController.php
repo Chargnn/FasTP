@@ -14,13 +14,14 @@ class HomeController extends Controller
      */
     public function index(){
         $cookie = json_decode(Cookie::get('ftp'));
+        $search = session('search');
         $path = session('path');
 
         if(!$cookie){
             return redirect('/connect');
         }
 
-        $conn = Ftp::instance(['host' => $cookie->host, 'port' => $cookie->port]);
+        $conn = Ftp::connect(['host' => $cookie->host, 'port' => $cookie->port]);
 
         if(!$conn){
             return redirect('/connect');
@@ -29,13 +30,18 @@ class HomeController extends Controller
         if (ftp_login($conn, $cookie->username, $cookie->password)) {
             ftp_pasv($conn, true);
             if($path){
-                ftp_chdir($conn, $path);
+                try {
+                    ftp_chdir($conn, $path);
+                } catch(\Exception $e){
+                    ftp_chdir($conn, '/');
+                }
                 $file_list = ftp_nlist($conn, $path);
             } else {
                 $file_list = ftp_nlist($conn, '/');
             }
             return view('index')->with('file_list', $file_list)
-                                      ->with('conn', $conn);
+                                      ->with('conn', $conn)
+                                      ->with('search', $search);
         } else {
             return redirect('/connect')->withErrors('Credentials are invalid');
         }

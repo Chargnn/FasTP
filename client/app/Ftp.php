@@ -4,19 +4,13 @@ namespace App;
 
 class Ftp
 {
-    /** Keep ftp connexion */
-    protected static $instance = null;
-
     /**
-     * Create instance
+     * Create connexion
      * @param array|null $connValues
      * @return null
      */
-    public static function instance(array $connValues = null){
-        if (static::$instance === null && $connValues !== null){
-            static::$instance = ftp_connect($connValues['host'], $connValues['port'] ?: 21);
-        }
-        return static::$instance;
+    public static function connect(array $connValues = null){
+        return ftp_connect($connValues['host'], $connValues['port'] ?: 21);
     }
 
     /**
@@ -93,21 +87,43 @@ class Ftp
      * @param $file
      * @return mixed
      */
-    public static function searchFile($conn, $path, $file){
-        $list = ftp_nlist($conn, $path);
-        $dirs = [];
+    public static function searchFile($conn, $search){
+        $dirs = Ftp::recursiveListDirectories($conn, '/');
 
-        foreach($list as $item){
-            if($file === $item)
-                return $path;
+        foreach($dirs as $dir){
+            ftp_chdir($conn, $dir);
+            $files = ftp_nlist($conn, $dir);
 
-            if(Ftp::isDir($conn, $item)){
-                $dirs[] = $item;
+            foreach($files as $file){
+                if($file === $search){
+                    return $dir;
+                }
+            }
+        }
+    }
+
+    public static function recursiveListDirectories($conn, $path)
+    {
+        $files = ftp_nlist($conn, $path);
+
+        $result = array();
+
+        foreach ($files as $file)
+        {
+            $filepath = $path . '/' . $file;
+
+            if (Ftp::isDir($conn, $file) && $file !== '.' && $file !== '..')
+            {
+                $result = array_merge($result, self::recursiveListDirectories($conn, $filepath));
+            }
+            else
+            {
+                if(!in_array($path, $result))
+                    $result[] = $path;
             }
         }
 
-        var_dump($dirs);
-            die;
+        return $result;
     }
 
     /** protected to prevent cloning */
