@@ -22,4 +22,8 @@ Route::post('/browse', 'FtpController@browse')->name('browse');
 Route::post('/createDir', 'FtpController@createDir')->name('createDir');
 Route::post('/search', 'FtpController@search')->name('search');
 
+Route::get('/addtab', 'TabController@add_form')->name('addtab');
+Route::post('/addtab', 'TabController@add')->name('addtab_action');
+Route::post('/changetab', 'TabController@change')->name('changetab_action');
+
 Route::get('/', 'HomeController@index')->name('listing');

@@ -11,9 +11,9 @@
             <div class="col-md-12">
                 <div class="tabs">
                     @foreach($aliases as $alias)
-                        <div class="tab @if($currentAlias === $alias) active @endif"><div class="tab-box"><p>{{ $alias }}</p></div></div>
+                        <div class="tab @if($currentAlias === $alias) active @endif" @if($currentAlias !== $alias) onclick="location.href('/changetab')" @endif><div class="tab-box"><p>{{ $alias }}</p></div></div>
                     @endforeach
-                        <div class="smalltab"><div class="tab-box"><i class="glyphicon glyphicon-plus"></i></div></div>
+                        <div class="smalltab" onclick="location.href('/addtab')"><div class="tab-box"><i class="glyphicon glyphicon-plus"></i></div></div>
                 </div>
                 <div class="panel panel-primary">
                     <div class="panel-heading">
