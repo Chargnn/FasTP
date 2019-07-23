@@ -13,6 +13,10 @@ class Ftp
         return ftp_connect($connValues['host'], $connValues['port'] ?: 21);
     }
 
+    public static function disconnect($conn){
+        ftp_close($conn);
+    }
+
     /**
      * Format bytes to mb, gb ...
      * @param $bytes
@@ -102,6 +106,12 @@ class Ftp
         }
     }
 
+    /**
+     * Get all files recursively on ftp server
+     * @param $conn
+     * @param $path
+     * @return array
+     */
     public static function recursiveListDirectories($conn, $path)
     {
         $files = ftp_nlist($conn, $path);
@@ -125,10 +135,4 @@ class Ftp
 
         return $result;
     }
-
-    /** protected to prevent cloning */
-    protected function __clone(){}
-
-    /** protected to prevent instantiation from outside of the class */
-    protected function __construct(){}
 }
