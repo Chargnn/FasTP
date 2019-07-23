@@ -29,7 +29,7 @@ class FtpController extends Controller
                            'port' => request('port'),
                            'username' => request('username'),
                            'password' => request('password')];
-        $conn = Ftp::instance(['host' => $request_values['host'], 'port' => $request_values['port']]);
+        $conn = Ftp::connect(['host' => $request_values['host'], 'port' => $request_values['port']]);
 
         if(!$conn) {
             return redirect('/connect')->withErrors('Can\'t connect to ftp');
@@ -63,7 +63,7 @@ class FtpController extends Controller
             return redirect('/connect');
         }
 
-        $conn = Ftp::instance(['host' => $cookie->host, 'port' => $cookie->port]);
+        $conn = Ftp::connect(['host' => $cookie->host, 'port' => $cookie->port]);
 
         if(!$conn) {
             return redirect('/connect')->withErrors('Can\'t connect to ftp');
@@ -99,7 +99,7 @@ class FtpController extends Controller
             return redirect('/connect');
         }
 
-        $conn = Ftp::instance(['host' => $cookie->host, 'port' => $cookie->port]);
+        $conn = Ftp::connect(['host' => $cookie->host, 'port' => $cookie->port]);
 
         if(!$conn) {
             return redirect('/connect')->withErrors('Can\'t connect to ftp');
@@ -126,7 +126,7 @@ class FtpController extends Controller
             return redirect('/connect');
         }
 
-        $conn = Ftp::instance(['host' => $cookie->host, 'port' => $cookie->port]);
+        $conn = Ftp::connect(['host' => $cookie->host, 'port' => $cookie->port]);
 
         if(!$conn) {
             return redirect('/connect')->withErrors('Can\'t connect to ftp');
@@ -153,7 +153,7 @@ class FtpController extends Controller
             return redirect('/connect');
         }
 
-        $conn = Ftp::instance(['host' => $cookie->host, 'port' => $cookie->port]);
+        $conn = Ftp::connect(['host' => $cookie->host, 'port' => $cookie->port]);
 
         if(!$conn) {
             return redirect('/connect')->withErrors('Can\'t connect to ftp');
@@ -188,7 +188,7 @@ class FtpController extends Controller
             return redirect('/connect');
         }
 
-        $conn = Ftp::instance(['host' => $cookie->host, 'port' => $cookie->port]);
+        $conn = Ftp::connect(['host' => $cookie->host, 'port' => $cookie->port]);
 
         if(!$conn) {
             return redirect('/connect')->withErrors('Can\'t connect to ftp');
@@ -215,7 +215,7 @@ class FtpController extends Controller
             return redirect('/connect');
         }
 
-        $conn = Ftp::instance(['host' => $cookie->host, 'port' => $cookie->port]);
+        $conn = Ftp::connect(['host' => $cookie->host, 'port' => $cookie->port]);
 
         if(!$conn) {
             return redirect('/connect')->withErrors('Can\'t connect to ftp');
@@ -242,7 +242,7 @@ class FtpController extends Controller
             return redirect('/connect');
         }
 
-        $conn = Ftp::instance(['host' => $cookie->host, 'port' => $cookie->port]);
+        $conn = Ftp::connect(['host' => $cookie->host, 'port' => $cookie->port]);
 
         if(!$conn) {
             return redirect('/connect')->withErrors('Can\'t connect to ftp');
@@ -251,9 +251,8 @@ class FtpController extends Controller
 
         if (ftp_login($conn, $cookie->username, $cookie->password)) {
             ftp_pasv($conn, true);
-            var_dump(Ftp::searchFile($conn, '/'));
-            die;
-            return redirect('/');
+            $path = Ftp::searchFile($conn, $file);
+            return redirect('/')->with('path', $path)->with('search', $file);
         } else {
             return redirect('/connect')->withErrors('Credentials are invalid');
         }

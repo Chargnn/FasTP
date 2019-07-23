@@ -4,19 +4,13 @@ namespace App;
 
 class Ftp
 {
-    /** Keep ftp connexion */
-    protected static $instance = null;
-
     /**
-     * Create instance
+     * Create connexion
      * @param array|null $connValues
      * @return null
      */
-    public static function instance(array $connValues = null){
-        if (static::$instance === null && $connValues !== null){
-            static::$instance = ftp_connect($connValues['host'], $connValues['port'] ?: 21);
-        }
-        return static::$instance;
+    public static function connect(array $connValues = null){
+        return ftp_connect($connValues['host'], $connValues['port'] ?: 21);
     }
 
     /**
@@ -93,24 +87,32 @@ class Ftp
      * @param $file
      * @return mixed
      */
-    public static function searchFile($conn, $search, $dirs = []){
-        dd(Ftp::recursiveListDirectories($conn, '/'));
+    public static function searchFile($conn, $search){
+        $dirs = Ftp::recursiveListDirectories($conn, '/');
+
+        foreach($dirs as $dir){
+            ftp_chdir($conn, $dir);
+            $files = ftp_nlist($conn, $dir);
+
+            foreach($files as $file){
+                if($file === $search){
+                    return $dir;
+                }
+            }
+        }
     }
 
     public static function recursiveListDirectories($conn, $path)
     {
-        $lines = ftp_rawlist($conn, $path);
+        $files = ftp_nlist($conn, $path);
 
         $result = array();
 
-        foreach ($lines as $line)
+        foreach ($files as $file)
         {
-            $tokens = explode(" ", $line);
-            $name = $tokens[count($tokens) - 1];
-            $type = $tokens[0][0];
-            $filepath = $path . '/' . $name;
+            $filepath = $path . '/' . $file;
 
-            if ($type === 'd' && $name !== '.' && $name !== '..')
+            if (Ftp::isDir($conn, $file) && $file !== '.' && $file !== '..')
             {
                 $result = array_merge($result, self::recursiveListDirectories($conn, $filepath));
             }

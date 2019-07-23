@@ -57,16 +57,18 @@
                                         <td width="10%"></td>
                                         <td width="10%"></td>
                                     @endif
-                                    @if($isDir)
-                                        <td width="100%">
-                                            <form action="/browse" method="POST">
-                                                <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-                                                <button type="submit" name="path" value="{{ (ends_with(ftp_pwd($conn), '/') ? ftp_pwd($conn): ftp_pwd($conn).'/').$file }}" class="btn-link">{{ $file }}</button>
-                                            </form>
-                                        </td>
-                                    @else
-                                        <td width="70%">{{ $file }}</td>
-                                    @endif
+                                    <div >
+                                        @if($isDir)
+                                            <td width="100%" @if($file === $search) bgcolor="#90ee90" @endif>
+                                                <form action="/browse" method="POST">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                                                    <button type="submit" name="path" value="{{ (ends_with(ftp_pwd($conn), '/') ? ftp_pwd($conn): ftp_pwd($conn).'/').$file }}" class="btn-link">{{ $file }}</button>
+                                                </form>
+                                            </td>
+                                        @else
+                                            <td width="70%" @if($file === $search) bgcolor="#90ee90" @endif>{{ $file }}</td>
+                                        @endif
+                                    </div>
                                     @if(!$isDir)
                                         <td class="pull-right" width="85px">
                                             @if(\App\Ftp::isFileExtension($file, '.txt') || \App\Ftp::isFileExtension($file, '.json'))
