@@ -13,6 +13,10 @@ class Ftp
         return ftp_connect($connValues['host'], $connValues['port'] ?: 21);
     }
 
+    public static function disconnect($conn){
+        ftp_close($conn);
+    }
+
     /**
      * Format bytes to mb, gb ...
      * @param $bytes
