@@ -2,6 +2,10 @@
 (function ($) {
     "use strict";
 
+    $('.tab').click(function(){
+        $('.tab').removeClass('active');
+        $(this).addClass('active');
+    });
 
     /*==================================================================
     [ Validate ]*/

@@ -20,9 +20,17 @@
 					</span>
 
 					<span class="txt1 p-b-11">
+						Alias
+					</span>
+					<div class="wrap-input100 m-b-12">
+						<input class="input100" type="text" name="alias" placeholder="(Host as default)" />
+						<span class="focus-input100"></span>
+					</div>
+
+					<span class="txt1 p-b-11">
 						Host
 					</span>
-					<div class="wrap-input100 validate-input m-b-36" data-validate="Host is required">
+					<div class="wrap-input100 validate-input m-b-12" data-validate="Host is required">
 						<input class="input100" type="text" name="host" />
 						<span class="focus-input100"></span>
 					</div>
@@ -50,7 +58,7 @@
 						Port
 					</span>
 					<div class="wrap-input100 m-b-12">
-						<input class="input100" type="number" name="port" min="0" max="65525" placeholder="21"/>
+						<input class="input100" type="number" name="port" min="0" max="65525" value="21"/>
 						<span class="focus-input100"></span>
 					</div>
 

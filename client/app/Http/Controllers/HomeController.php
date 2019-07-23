@@ -28,6 +28,8 @@ class HomeController extends Controller
         }
 
         if (ftp_login($conn, $cookie->username, $cookie->password)) {
+            $aliases = [$cookie->host, 'asd', '123as'];
+
             ftp_pasv($conn, true);
             if($path){
                 try {
@@ -41,7 +43,9 @@ class HomeController extends Controller
             }
             return view('index')->with('file_list', $file_list)
                                       ->with('conn', $conn)
-                                      ->with('search', $search);
+                                      ->with('search', $search)
+                                      ->with('aliases', $aliases)
+                                      ->with('currentAlias', $aliases[0]);
         } else {
             return redirect('/connect')->withErrors('Credentials are invalid');
         }

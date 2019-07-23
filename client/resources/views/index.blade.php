@@ -9,12 +9,22 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+                <div class="tabs">
+                    @foreach($aliases as $alias)
+                        <div class="tab @if($currentAlias === $alias) active @endif"><div class="tab-box"><p>{{ $alias }}</p></div></div>
+                    @endforeach
+                        <div class="smalltab"><div class="tab-box"><i class="glyphicon glyphicon-plus"></i></div></div>
+                </div>
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         @if(ftp_pwd($conn) !== '/')
-                            <form action="/browse" method="POST">
+                            <form action="/browse" method="POST" style="display: inline-block;">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-                                <button type="submit" name="path" value="{{ (ends_with(ftp_pwd($conn), '/') ? ftp_pwd($conn): ftp_pwd($conn).'/').'..' }}" class="btn-link" style="color: #fff"><i class="glyphicon glyphicon-arrow-left"></i></button>
+                                <button type="submit" name="path" value="/" class="btn-link" style="color: #fff;"><i class="glyphicon glyphicon-home"></i></button>
+                            </form>
+                            <form action="/browse" method="POST" style="display: inline-block;">
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                                <button type="submit" name="path" value="{{ (ends_with(ftp_pwd($conn), '/') ? ftp_pwd($conn): ftp_pwd($conn).'/').'..' }}" class="btn-link" style="color: #fff;"><i class="glyphicon glyphicon-arrow-left"></i></button>
                             </form>
                         @endif
                         Files list - {{ Session::get('path') ?: '/' }} - {{ ftp_systype($conn) }}
@@ -123,4 +133,5 @@
 @section('footer')
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="/js/main.js"></script>
 @endsection

@@ -28,7 +28,8 @@ class FtpController extends Controller
         $request_values = ['host' => request('host'),
                            'port' => request('port'),
                            'username' => request('username'),
-                           'password' => request('password')];
+                           'password' => request('password'),
+                           'alias' => request('alias') ?: request('host')];
         $conn = Ftp::connect(['host' => $request_values['host'], 'port' => $request_values['port']]);
 
         if(!$conn) {
@@ -234,6 +235,11 @@ class FtpController extends Controller
         }
     }
 
+    /**
+     * Search for a file in the ftp server, then redirect the user to that directory
+     * with highlighted section
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function search(){
         $file = request()->file;
         $path = session('path') ?: '/';
