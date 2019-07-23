@@ -239,14 +239,13 @@ class FtpController extends Controller
             return redirect('/connect')->withErrors('Can\'t connect to ftp');
         }
 
-
         if (ftp_login($conn, $cookie->username, $cookie->password)) {
-            if(ends_with($path, '/')){
-                ftp_mkdir($conn, $path.$dir);
-            } else {
-                ftp_mkdir($conn, $path.'/'.$dir);
-            }
+            // TODO: figure the error out...
+            try {
+                ftp_mkdir($conn, $dir);
+            } catch (\Exception $e){
 
+            }
             Ftp::disconnect($conn);
             return redirect('/');
         } else {
@@ -273,7 +272,6 @@ class FtpController extends Controller
         if(!$conn) {
             return redirect('/connect')->withErrors('Can\'t connect to ftp');
         }
-
 
         if (ftp_login($conn, $cookie->username, $cookie->password)) {
             ftp_pasv($conn, true);
