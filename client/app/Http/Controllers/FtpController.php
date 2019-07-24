@@ -242,6 +242,7 @@ class FtpController extends Controller
         if (ftp_login($conn, $cookie->username, $cookie->password)) {
             // TODO: figure the error out...
             try {
+                ftp_chdir($conn, $path);
                 ftp_mkdir($conn, $dir);
             } catch (\Exception $e){
 

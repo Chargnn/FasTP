@@ -33,7 +33,8 @@ class HomeController extends Controller
                 try {
                     ftp_chdir($conn, $path);
                 } catch(\Exception $e){
-                    ftp_chdir($conn, '/');
+                    $path = session(['path' => '/']);
+                    ftp_chdir($conn, $path);
                 }
                 $file_list = ftp_nlist($conn, $path);
             } else {

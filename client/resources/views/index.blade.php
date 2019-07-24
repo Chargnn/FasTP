@@ -17,7 +17,7 @@
                                 <button type="submit" name="path" value="{{ (ends_with(ftp_pwd($conn), '/') ? ftp_pwd($conn): ftp_pwd($conn).'/').'..' }}" class="btn-link" style="color: #fff"><i class="glyphicon glyphicon-arrow-left"></i></button>
                             </form>
                         @endif
-                        Files list - {{ Session::get('path') ?: '/' }} - {{ ftp_systype($conn) }}
+                        Files list - {{ strlen(Session::get('path')) > 50 ? '...' : '' }}{{ substr(Session::get('path') ?: '/', -50) }} - {{ ftp_systype($conn) }}
                         <div class="pull-right action-buttons">
                             <div class="btn-group pull-right">
                                 <button tabindex="0" name="Settings" type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
@@ -51,26 +51,26 @@
                                 <?php $isDir = \App\Ftp::isDir($conn, $file); ?>
                                 <tr>
                                     @if(!$isDir)
-                                        <td width="10%">{{ ftp_mdtm($conn, $file) ? \App\Ftp::formatDate(ftp_mdtm($conn, $file)) : '' }}</td>
-                                        <td width="10%">{{ ftp_size($conn, $file) > 0 ? '('.\App\Ftp::formatSize(ftp_size($conn, $file)).')' : '(0 B)' }}</td>
+                                        <td style="width:10%;">{{ ftp_mdtm($conn, $file) ? \App\Ftp::formatDate(ftp_mdtm($conn, $file)) : '' }}</td>
+                                        <td style="width:10%;">{{ ftp_size($conn, $file) > 0 ? '('.\App\Ftp::formatSize(ftp_size($conn, $file)).')' : '(0 B)' }}</td>
                                     @else
-                                        <td width="10%"></td>
-                                        <td width="10%"></td>
+                                        <td style="width:10%;"></td>
+                                        <td style="width:10%;"></td>
                                     @endif
-                                    <div >
+                                    <div>
                                         @if($isDir)
-                                            <td width="100%" @if($file === $search) bgcolor="#90ee90" @endif>
+                                            <td style="width:70%;" @if($file === $search) bgcolor="#90ee90" @endif>
                                                 <form action="/browse" method="POST">
                                                     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                                                     <button type="submit" name="path" value="{{ (ends_with(ftp_pwd($conn), '/') ? ftp_pwd($conn): ftp_pwd($conn).'/').$file }}" class="btn-link">{{ $file }}</button>
                                                 </form>
                                             </td>
                                         @else
-                                            <td width="70%" @if($file === $search) bgcolor="#90ee90" @endif>{{ $file }}</td>
+                                            <td style="width:70%;" @if($file === $search) bgcolor="#90ee90" @endif>{{ $file }}</td>
                                         @endif
                                     </div>
                                     @if(!$isDir)
-                                        <td class="pull-right" width="85px">
+                                        <td class="pull-right" style="width:85px;">
                                             @if(\App\Ftp::isFileExtension($file, '.txt') || \App\Ftp::isFileExtension($file, '.json'))
                                                 <a href="/see/{{ $file }}" title="Preview the file" class="flag"><span class="glyphicon glyphicon-eye-open"></span></a>
                                             @endif
