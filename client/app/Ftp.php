@@ -87,9 +87,8 @@ class Ftp
     /**
      * Search a file recursively through all the ftp directories
      * @param $conn
-     * @param $path
-     * @param $file
-     * @return mixed
+     * @param $search
+     * @return mixed|null
      */
     public static function searchFile($conn, $search){
         $dirs = Ftp::recursiveListDirectories($conn, '/');
@@ -108,6 +107,8 @@ class Ftp
 
             }
         }
+
+        return null;
     }
 
     /**

@@ -9,6 +9,7 @@
         <meta name="author" content="Alexis Coulombe">
         <meta name="theme-color" content="#558de6">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
         @yield('header')
     </head>
     <body>
