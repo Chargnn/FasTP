@@ -95,13 +95,17 @@ class Ftp
         $dirs = Ftp::recursiveListDirectories($conn, '/');
 
         foreach($dirs as $dir){
-            ftp_chdir($conn, $dir);
-            $files = ftp_nlist($conn, $dir);
+            try {
+                ftp_chdir($conn, $dir);
+                $files = ftp_nlist($conn, $dir);
 
-            foreach($files as $file){
-                if($file === $search){
-                    return $dir;
+                foreach($files as $file){
+                    if($file === $search){
+                        return $dir;
+                    }
                 }
+            } catch(\Exception $e){
+
             }
         }
     }

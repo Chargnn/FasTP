@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Ftp;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller
 {
