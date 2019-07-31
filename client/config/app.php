@@ -3,6 +3,16 @@
 return [
 
     /*
+     * Maximum number of tabs to keep track
+     */
+    'max-tab-number' => 4,
+
+    /*
+     * Number of minutes to keep cookie alive
+     */
+    'cookie-timeout-time' => 120,
+
+    /*
     |--------------------------------------------------------------------------
     | Application Name
     |--------------------------------------------------------------------------

@@ -9,14 +9,23 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div class="tabs">
-                    @foreach($aliases as $alias)
-                        <div class="tab @if($currentAlias === $alias) active @endif" @if($currentAlias !== $alias) onclick="location.href('/changetab')" @endif><div class="tab-box"><p>{{ $alias }}</p></div></div>
-                    @endforeach
-                        <div class="smalltab" onclick="location.href('/addtab')"><div class="tab-box"><i class="glyphicon glyphicon-plus"></i></div></div>
-                </div>
                 <div class="panel panel-primary">
                     <div class="panel-heading">
+                        <ul class="tabrow">
+                            @php $showAliases = [] @endphp
+                            @foreach($aliases as $alias)
+                                @if($alias !== 'Empty')
+                                    @php $showAliases[] = $alias; @endphp
+                                    <li class="@if($currentAlias === $alias) selected @endif">
+                                        <a href="#" title="{{ $alias }}">{{ $alias }}</a>
+                                    </li>
+                                @endif
+                            @endforeach
+                            @if(count($showAliases) <= config('app.max-tab-number'))
+                                <li><a href="#"><i class="glyphicon glyphicon-plus"></i></a></li>
+                            @endif
+                        </ul>
+
                         @if(ftp_pwd($conn) !== '/')
                             <form action="/browse" method="POST" style="display: inline-block;">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}" />

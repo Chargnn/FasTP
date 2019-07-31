@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Ftp;
+use App\Helper;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
 
@@ -14,7 +15,7 @@ class FtpController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function connect_form(){
-        if(Cookie::get('ftp') && Cookie::get('ftp') !== ''){
+        if(count(Helper::searchCookies('ftp_')) > 0){
             return redirect('/');
         }
         return view('ftp-login.index');
@@ -33,6 +34,7 @@ class FtpController extends Controller
                            'username' => request('username'),
                            'password' => request('password'),
                            'alias' => request('alias') ?: request('host')];
+
         $conn = Ftp::connect(['host' => $request_values['host'], 'port' => $request_values['port']]);
 
         if(!$conn) {
@@ -41,8 +43,25 @@ class FtpController extends Controller
 
         if (ftp_login($conn, request('username'), request('password'))) {
             Ftp::disconnect($conn);
-            // Set cookie for 120min and redirect to ftp root
-            return redirect('/')->withCookie(Cookie::make('ftp', json_encode($request_values), 120));
+            $cookies = [];
+
+            // Set cookies for each tabs,
+            // first with data from connexion page and others empty for later use
+            if(request('keepCookie')){
+                $cookies[] = Cookie::forever('ftp_0', json_encode($request_values));
+
+                for($i = 1; $i < config('app.max-tab-number'); $i++){
+                    $cookies[] = Cookie::forever('ftp_'.$i, '');
+                }
+            } else {
+                $cookies[] = Cookie::make('ftp_0', json_encode($request_values), config('app.cookie-timeout-time'));
+
+                for($i = 1; $i < config('app.max-tab-number'); $i++){
+                    $cookies[] = Cookie::make('ftp_'.$i, '', config('app.cookie-timeout-time'));
+                }
+            }
+
+            return redirect('/')->withCookies($cookies);
         } else {
             return redirect('/connect')->withErrors('Credentials are invalid');
         }

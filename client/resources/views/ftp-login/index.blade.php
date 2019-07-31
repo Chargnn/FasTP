@@ -58,19 +58,18 @@
 						Port
 					</span>
 					<div class="wrap-input100 m-b-12">
-						<input class="input100" type="number" name="port" min="0" max="65525" value="21"/>
+						<input class="input100" type="number" name="port" min="0" max="65535" value="21"/>
 						<span class="focus-input100"></span>
 					</div>
 
-					<?php //TODO: Add info to localstorage ?>
-					<!--<div class="flex-sb-m w-full p-b-48">
+					<div class="flex-sb-m w-full p-b-48">
 						<div class="contact100-form-checkbox">
-							<input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
+							<input class="input-checkbox100" id="ckb1" type="checkbox" name="keepCookie">
 							<label class="label-checkbox100" for="ckb1">
-								Remember me
+								Keep connexions forever
 							</label>
 						</div>
-					</div>-->
+					</div>
 
 					<div class="container-login100-form-btn">
 						<button name="Connect" class="login100-form-btn">
