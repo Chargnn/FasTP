@@ -22,11 +22,11 @@ class HomeController extends Controller
         $search = session('search');
         $path = session('path');
 
-        $conn = Ftp::connect(['host' => $cookie->host, 'port' => $cookie->port]);
-
         if(!$cookie){
             return redirect('/connect');
         }
+
+        $conn = Ftp::connect(['host' => $cookie->host, 'port' => $cookie->port]);
 
         if(!$conn){
             return redirect('/connect');

@@ -17,12 +17,12 @@
                                 @if($alias !== 'Empty')
                                     @php $showAliases[] = $alias; @endphp
                                     <li class="@if($currentAlias === $alias) selected @endif">
-                                        <a href="#" title="{{ $alias }}">{{ $alias }}</a>
+                                        <a href="/changetab" title="{{ $alias }}">{{ $alias }}</a>
                                     </li>
                                 @endif
                             @endforeach
-                            @if(count($showAliases) <= config('app.max-tab-number'))
-                                <li><a href="#"><i class="glyphicon glyphicon-plus"></i></a></li>
+                            @if(count($showAliases) !== config('app.max-tab-number'))
+                                <li><a href="/addtab"><i class="glyphicon glyphicon-plus"></i></a></li>
                             @endif
                         </ul>
 
